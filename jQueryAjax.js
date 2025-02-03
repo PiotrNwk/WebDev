@@ -1,32 +1,27 @@
-
-    <title>AJAX z jQuery</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-
-    <div>
-        <p>Aktualna wartość: <span id="value">0</span></p>
-        <button id="updateButton">Zwiększ wartość</button>
-    </div>
-
-    <script>
-        $(document).ready(function() {
-            $("#updateButton").click(function() {
-                $.ajax({
-                    url: "/update-value",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ action: "increment" }),
-                    success: function(response) {
-                        $("#value").text(response.newValue);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Błąd:", error);
-                    }
-                });
-            });
-        });
-    </script>
-
-</body>
-</html>
+function updateJobStatus(jobName, status) {
+                    $.ajax({
+                        url: "broker_update.php",
+                        type: "POST",
+                        data: { jobName: jobName, status: status },
+                        success: function (data) {
+                            let arr = $('#hidden_application_data')[0].innerHTML;
+                            try {
+                                let jsoned = JSON.parse(arr);
+                                let result = $.grep(jsoned, function (item) {
+                                    return item[0] === "get_calculator";
+                                });
+                                if (result.length > 0) {
+                                    result[0][4] = status;
+                                    console.log(result[0][4]);
+                                } else {
+                                    console.error("Item not found in the JSON data.");
+                                }
+                            } catch (e) {
+                                console.error("Error parsing JSON data: ", e);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("AJAX request failed: ", textStatus, errorThrown);
+                        }
+                    });
+                }
