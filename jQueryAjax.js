@@ -15,13 +15,16 @@ function updateJobStatus(jobName, status) {
                     result[4] = status;  // Update the status in JSON
                     console.log("Updated Status: ", result[4]);
 
-                    // Save the updated JSON back to the hidden data (if needed)
+                    // Save the updated JSON back to the hidden data
                     element[0].innerHTML = JSON.stringify(jsoned);
 
-                    // **Update the corresponding div in the dynamically generated table**
-                    $(".table_matrix_td0").each(function () {
-                        if ($(this).text().trim() === result[4]) {
-                            $(this).text(status).css("color", status === "Ready" ? "yellow" : "green");
+                    // **Find the correct `.table_row` that contains `.table_matrix_first_col` with "get_calculator"**
+                    $(".table_row").each(function () {
+                        let row = $(this);
+                        let firstCol = row.find(".table_matrix_first_col").text().trim();
+
+                        if (firstCol === "get_calculator") {
+                            row.find(".table_matrix_td0").text(status);  // Update only in this row
                         }
                     });
 
