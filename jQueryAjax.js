@@ -18,12 +18,14 @@ function updateJobStatus(jobName, status) {
                     // Save the updated JSON back to the hidden data
                     element[0].innerHTML = JSON.stringify(jsoned);
 
-                    // **Find the correct `.table_row` that contains `.table_matrix_first_col` with "get_calculator"**
+                    // **Find the correct `.table_row` that meets all conditions**
                     $(".table_row").each(function () {
                         let row = $(this);
-                        let firstCol = row.find(".table_matrix_first_col").text().trim();
+                        let firstColText = row.find(".table_matrix_first_col").text().trim();
+                        let headerText = row.find(".div_table_header").text().trim();
 
-                        if (firstCol === "get_calculator") {
+                        // Update only if it contains "get_calculator" AND has a "status" header
+                        if (firstColText === "get_calculator" && headerText === "status") {
                             row.find(".table_matrix_td0").text(status);  // Update only in this row
                         }
                     });
