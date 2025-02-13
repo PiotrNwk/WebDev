@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Example</title>
+    <style>
+        .link-button {
+            /* Basic styling for the button */
+            background-color: #007BFF; /* Blue color which is typical for links */
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none; /* Remove underline */
+            border-radius: 5px;
+            display: inline-block;
+            transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+            font-family: Arial, sans-serif;
+        }
+
+        .link-button:hover {
+            /* Hover effect */
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: scale(1.05); /* Slightly enlarges the button */
+            text-decoration: underline; /* Adds underline on hover to mimic link behavior */
+        }
+
+        .link-button:active {
+            /* Active state when clicked */
+            transform: scale(0.95); /* Slightly shrinks when clicked */
+        }
+    </style>
+</head>
+<body>
+    <a href="#" class="link-button">Show Jobs ➔</a>
+</body>
+</html>
