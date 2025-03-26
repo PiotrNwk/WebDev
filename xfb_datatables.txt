@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<table id="dataTable" border="1">
+  <!-- Same table structure as above -->
+</table>
+
+<script>
+$(document).ready(function () {
+  $('#dataTable').DataTable({
+    ajax: 'fetch_data.php',
+    columns: [
+      { data: 'ID' },
+      { data: 'FILE_NAME' },
+      { data: 'FILE_SIZE' },
+      { data: 'SOURCE' },
+      { data: 'STATUS' },
+      { data: 'SERVER' },
+      { data: 'DESTINATION' },
+      { data: 'DIRECTION' },
+      { data: 'FLOWID' },
+      { data: 'DATE' }
+    ]
+  });
+});
+</script>
