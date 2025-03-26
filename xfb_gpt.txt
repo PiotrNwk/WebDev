@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Filter with Dropdowns</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        input, select {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<table id="dataTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>FILE_NAME</th>
+            <th>FILE_SIZE</th>
+            <th>SOURCE</th>
+            <th>STATUS</th>
+            <th>SERVER</th>
+            <th>DESTINATION</th>
+            <th>DIRECTION</th>
+            <th>FLOWID</th>
+            <th>DATE</th>
+        </tr>
+        <tr>
+            <!-- Filter inputs and dropdowns -->
+            <th><input type="text" class="filter" data-column="0"></th>
+            <th><input type="text" class="filter" data-column="1"></th>
+            <th><input type="text" class="filter" data-column="2"></th>
+            <th><input type="text" class="filter" data-column="3"></th>
+            <th>
+                <select class="filter-dropdown" data-column="4">
+                    <option value="">All</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </th>
+            <th><input type="text" class="filter" data-column="5"></th>
+            <th><input type="text" class="filter" data-column="6"></th>
+            <th>
+                <select class="filter-dropdown" data-column="7">
+                    <option value="">All</option>
+                    <option value="Upload">Upload</option>
+                    <option value="Download">Download</option>
+                </select>
+            </th>
+            <th><input type="text" class="filter" data-column="8"></th>
+            <th><input type="text" class="filter" data-column="9"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // Example Data - Replace this with database data
+        $statuses = ["Active", "Inactive", "Pending"];
+        $directions = ["Upload", "Download"];
+        
+        for ($i = 1; $i <= 9; $i++) {
+            $status = $statuses[array_rand($statuses)];
+            $direction = $directions[array_rand($directions)];
+            
+            echo "<tr>
+                    <td>$i</td>
+                    <td>File$i.txt</td>
+                    <td>" . rand(10, 500) . " KB</td>
+                    <td>Source$i</td>
+                    <td>$status</td>
+                    <td>Server$i</td>
+                    <td>Destination$i</td>
+                    <td>$direction</td>
+                    <td>" . rand(1000, 9999) . "</td>
+                    <td>2025-03-26</td>
+                  </tr>";
+        }
+        ?>
+    </tbody>
+</table>
+
+<script>
+$(document).ready(function(){
+    // Text input filters
+    $(".filter").on("keyup", function() {
+        var column = $(this).data("column");
+        var value = $(this).val().toLowerCase();
+        
+        $("#dataTable tbody tr").filter(function() {
+            $(this).toggle($(this).find("td").eq(column).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+    // Dropdown filters
+    $(".filter-dropdown").on("change", function() {
+        var column = $(this).data("column");
+        var value = $(this).val().toLowerCase();
+        
+        $("#dataTable tbody tr").each(function() {
+            var cellText = $(this).find("td").eq(column).text().toLowerCase();
+            if (value === "" || cellText === value) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>
