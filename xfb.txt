@@ -1,193 +1,118 @@
-<table id="dataTable" border="1">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>FILE_NAME</th>
-      <th>FILE_SIZE</th>
-      <th>SOURCE</th>
-      <th>STATUS</th>
-      <th>SERVER</th>
-      <th>DESTINATION</th>
-      <th>DIRECTION</th>
-      <th>FLOWID</th>
-      <th>DATE</th>
-    </tr>
-  </thead>
-  <tbody id="tableBody">
-    <!-- Rows will be populated dynamically via JavaScript -->
-  </tbody>
-</table>
-
-<?php
-header('Content-Type: application/json');
-
-// Simulated database query (replace with your actual database logic)
-$data = [
-  ['ID' => 1, 'FILE_NAME' => 'file1.txt', 'FILE_SIZE' => 1024, 'SOURCE' => 'src1', 'STATUS' => 'active', 'SERVER' => 'srv1', 'DESTINATION' => 'dest1', 'DIRECTION' => 'in', 'FLOWID' => 'flow1', 'DATE' => '2023-10-01'],
-  ['ID' => 2, 'FILE_NAME' => 'file2.pdf', 'FILE_SIZE' => 2048, 'SOURCE' => 'src2', 'STATUS' => 'inactive', 'SERVER' => 'srv2', 'DESTINATION' => 'dest2', 'DIRECTION' => 'out', 'FLOWID' => 'flow2', 'DATE' => '2023-10-02'],
-  // Add more rows as needed
-];
-
-echo json_encode($data);
-?>
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  fetch('fetch_data.php')
-    .then(response => response.json())
-    .then(data => {
-      window.tableData = data; // Store data globally for filtering
-      populateTable(data);
-    });
-
-  function populateTable(data) {
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = ''; // Clear existing rows
-    data.forEach(row => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${row.ID}</td>
-        <td>${row.FILE_NAME}</td>
-        <td>${row.FILE_SIZE}</td>
-        <td>${row.SOURCE}</td>
-        <td>${row.STATUS}</td>
-        <td>${row.SERVER}</td>
-        <td>${row.DESTINATION}</td>
-        <td>${row.DIRECTION}</td>
-        <td>${row.FLOWID}</td>
-        <td>${row.DATE}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-});
-
-
-<thead>
-  <tr>
-    <th>ID <span class="filter-btn" data-column="ID">🔽</span></th>
-    <th>FILE_NAME <span class="filter-btn" data-column="FILE_NAME">🔽</span></th>
-    <th>FILE_SIZE <span class="filter-btn" data-column="FILE_SIZE">🔽</span></th>
-    <th>SOURCE <span class="filter-btn" data-column="SOURCE">🔽</span></th>
-    <th>STATUS <span class="filter-btn" data-column="STATUS">🔽</span></th>
-    <th>SERVER <span class="filter-btn" data-column="SERVER">🔽</span></th>
-    <th>DESTINATION <span class="filter-btn" data-column="DESTINATION">🔽</span></th>
-    <th>DIRECTION <span class="filter-btn" data-column="DIRECTION">🔽</span></th>
-    <th>FLOWID <span class="filter-btn" data-column="FLOWID">🔽</span></th>
-    <th>DATE <span class="filter-btn" data-column="DATE">🔽</span></th>
-  </tr>
-</thead>
-
-.filter-btn {
-  cursor: pointer;
-  margin-left: 5px;
+<style>
+/* Table Styling */
+#dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+#dataTable th {
+    background-color: #f5f5f5;
+    color: #333;
+    font-weight: bold;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+#dataTable td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    color: #666;
+}
+
+#dataTable tbody tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.2s;
+}
+
+/* Filter Button Styling */
+.filter-btn {
+    cursor: pointer;
+    margin-left: 5px;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.filter-btn:hover {
+    color: #007bff;
+}
+
+/* Filter Dropdown Styling */
 .filter-dropdown {
-  position: absolute;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  z-index: 1000;
-  display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 15px;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    min-width: 200px;
 }
 
 .filter-dropdown.show {
-  display: block;
+    display: block;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  let activeFilters = {}; // Store active filters
+.filter-dropdown label {
+    display: block;
+    margin: 8px 0;
+    color: #444;
+}
 
-  fetch('fetch_data.php')
-    .then(response => response.json())
-    .then(data => {
-      window.tableData = data;
-      populateTable(data);
+.filter-dropdown input[type="checkbox"] {
+    margin-right: 8px;
+    vertical-align: middle;
+}
 
-      // Add event listeners to filter buttons
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-          const column = this.getAttribute('data-column');
-          showFilterDropdown(column, this);
-        });
-      });
-    });
+.filter-dropdown button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
 
-  function showFilterDropdown(column, btn) {
-    // Remove any existing dropdown
-    const existingDropdown = document.querySelector('.filter-dropdown');
-    if (existingDropdown) existingDropdown.remove();
+.filter-dropdown button:first-of-type {
+    background-color: #007bff;
+    color: white;
+    margin-right: 5px;
+}
 
-    // Get unique values for the column
-    const uniqueValues = [...new Set(window.tableData.map(row => row[column]))];
+.filter-dropdown button:first-of-type:hover {
+    background-color: #0056b3;
+}
 
-    // Create dropdown
-    const dropdown = document.createElement('div');
-    dropdown.className =  = 'filter-dropdown';
-    dropdown.innerHTML = `
-      <div>
-        <strong>Filter by ${column}</strong><br>
-        ${uniqueValues.map(value => `
-          <label>
-            <input type="checkbox" value="${value}" data-column="${column}">
-            ${value}
-          </label><br>
-        `).join('')}
-        <button onclick="applyFilters()">Apply</button>
-        <button onclick="clearFilters()">Clear</button>
-      </div>
-    `;
-    btn.parentElement.appendChild(dropdown);
-    dropdown.classList.add('show');
-  }
+.filter-dropdown button:last-of-type {
+    background-color: #dc3545;
+    color: white;
+}
 
-  window.applyFilters = function () {
-    const checkboxes = document.querySelectorAll('.filter-dropdown input:checked');
-    activeFilters = {};
-    checkboxes.forEach(checkbox => {
-      const column = checkbox.getAttribute('data-column');
-      const value = checkbox.value;
-      if (!activeFilters[column]) activeFilters[column] = [];
-      activeFilters[column].push(value);
-    });
+.filter-dropdown button:last-of-type:hover {
+    background-color: #b02a37;
+}
 
-    // Filter the data
-    const filteredData = window.tableData.filter(row => {
-      return Object.keys(activeFilters).every(column => {
-        return activeFilters[column].includes(row[column]);
-      });
-    });
+/* Responsive Design */
+@media (max-width: 768px) {
+    #dataTable {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .filter-dropdown {
+        min-width: 150px;
+    }
+}
+</style>
 
-    populateTable(filteredData);
-    document.querySelector('.filter-dropdown').remove();
-  };
-
-  window.clearFilters = function () {
-    activeFilters = {};
-    populateTable(window.tableData);
-    document.querySelector('.filter-dropdown').remove();
-  };
-
-  function populateTable(data) {
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '';
-    data.forEach(row => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${row.ID}</td>
-        <td>${row.FILE_NAME}</td>
-        <td>${row.FILE_SIZE}</td>
-        <td>${row.SOURCE}</td>
-        <td>${row.STATUS}</td>
-        <td>${row.SERVER}</td>
-        <td>${row.DESTINATION}</td>
-        <td>${row.DIRECTION}</td>
-        <td>${row.FLOWID}</td>
-        <td>${row.DATE}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-});
-
+<!-- Rest of your HTML/PHP/JavaScript code remains the same -->
+<table id="dataTable" border="1">
+  <thead>
+    <tr>
+      <th>ID <span class="filter-btn" data-column="ID">🔽</span></th>
+      <th>FILE_NAME <span class="filter-btn" data-column="FILE_NAME">🔽</span></th>
+      <th>FILE_SIZE <span class="filter-btn" data-column="FILE_SIZE">🔽</span></th
