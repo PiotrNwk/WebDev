@@ -1,16 +1,11 @@
-Here's an example code that accomplishes what you described:
 
-HTML
-```
 <table id="myTable">
     <!-- your table content here -->
 </table>
 
 <button id="refreshButton">Refresh Table</button>
-```
 
-JavaScript (using jQuery)
-```
+<script>
 $(document).ready(function() {
     $('#refreshButton').click(function() {
         $.ajax({
@@ -35,7 +30,7 @@ $(document).ready(function() {
         });
     });
 });
-```
+</script>
 
 <!--
 Explanation
