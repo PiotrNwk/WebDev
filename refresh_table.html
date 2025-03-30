@@ -1,0 +1,58 @@
+Here's an example code that accomplishes what you described:
+
+HTML
+```
+<table id="myTable">
+    <!-- your table content here -->
+</table>
+
+<button id="refreshButton">Refresh Table</button>
+```
+
+JavaScript (using jQuery)
+```
+$(document).ready(function() {
+    $('#refreshButton').click(function() {
+        $.ajax({
+            type: 'GET',
+            url: '/your-ajax-url', // replace with your AJAX URL
+            dataType: 'json',
+            success: function(data) {
+                // clear existing table content
+                $('#myTable').empty();
+                
+                // populate table with new data
+                $.each(data, function(index, row) {
+                    $('#myTable').append('' +
+                        '<tr>' +
+                            '<td>' + row.column1 + '</td>' +
+                            '<td>' + row.column2 + '</td>' +
+                            // add more columns as needed
+                        '</tr>' +
+                    '');
+                });
+            }
+        });
+    });
+});
+```
+
+<!--
+Explanation
+1. We add a button with the ID `refreshButton` next to the table.
+2. We use jQuery to attach a click event handler to the button.
+3. When the button is clicked, we send a GET request to the specified AJAX URL using `$.ajax()`.
+4. We expect the server to respond with JSON data.
+5. In the `success` callback, we clear the existing table content using `empty()`.
+6. We then iterate over the received data using `$.each()` and append new table rows to the table.
+
+Server-side Implementation
+You'll need to create an AJAX endpoint on your server that responds to the GET request. This endpoint should:
+
+1. Connect to your database.
+2. Retrieve the updated data.
+3. Encode the data as JSON.
+4. Return the JSON data in the response.
+
+The specifics of the server-side implementation will depend on your programming language, framework, and database.
+-->
