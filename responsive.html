@@ -1,0 +1,45 @@
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th>Jobname</th>
+      <th>Jobtype</th>
+      <th>Status</th>
+      <!-- etc -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td data-label="Jobname">Get_VAR</td>
+      <td data-label="Jobtype">DB</td>
+      <td data-label="Status">QueryRunFailed</td>
+      <!-- etc -->
+    </tr>
+  </tbody>
+</table>
+
+@media screen and (max-width: 768px) {
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table tr {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .responsive-table td {
+    display: block;
+    text-align: right;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .responsive-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    text-align: left;
+    font-weight: bold;
+  }
+}
+
