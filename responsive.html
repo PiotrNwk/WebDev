@@ -1,45 +1,63 @@
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th>Jobname</th>
-      <th>Jobtype</th>
-      <th>Status</th>
-      <!-- etc -->
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td data-label="Jobname">Get_VAR</td>
-      <td data-label="Jobtype">DB</td>
-      <td data-label="Status">QueryRunFailed</td>
-      <!-- etc -->
-    </tr>
-  </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
 
-@media screen and (max-width: 768px) {
-  .responsive-table thead {
-    display: none;
-  }
+    .responsive-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-  .responsive-table tr {
-    display: block;
-    margin-bottom: 10px;
-  }
+    .responsive-table th,
+    .responsive-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
 
-  .responsive-table td {
-    display: block;
-    text-align: right;
-    position: relative;
-    padding-left: 50%;
-  }
+    .responsive-table th {
+      background-color: #f2f2f2;
+    }
 
-  .responsive-table td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 10px;
-    text-align: left;
-    font-weight: bold;
-  }
-}
+    @media screen and (max-width: 768px) {
+      .responsive-table thead {
+        display: none;
+      }
 
+      .responsive-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+      }
+
+      .responsive-table td {
+        display: block;
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+      }
+
+      .responsive-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        text-align: left;
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h2>Job Status Table</h2>
+
+<table class="responsive-table
