@@ -16,3 +16,25 @@ $username = $_SESSION['username']; // Get logged-in user's name
     </script>
 </body>
 </html>
+
+<?php
+session_start();
+header('Content-Type: application/json');
+
+if (isset($_SESSION['username'])) {
+    echo json_encode(['username' => $_SESSION['username']]);
+} else {
+    echo json_encode(['error' => 'Not logged in']);
+}
+?>
+
+fetch('/api/userinfo.php')
+    .then(res => res.json())
+    .then(data => {
+        if (data.username) {
+            console.log("Logged in as:", data.username);
+        } else {
+            console.log("User not logged in.");
+        }
+    });
+
